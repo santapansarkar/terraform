@@ -21,7 +21,7 @@ module "vpc" {
 
   azs             = var.vpc_azs
   private_subnets = var.vpc_private_subnets
-  
+
 
   tags = var.vpc_tags
 }
