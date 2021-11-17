@@ -7,12 +7,21 @@ resource "aws_vpc" "eb-vpc" {
   }
 }
 
-resource "aws_subnet" "eks" {
+resource "aws_subnet" "eks_a" {
     vpc_id     = aws_vpc.eb-vpc.id
-    cidr_block = "${var.eks_subnet_cidr_range}"
+    cidr_block = "${var.eks_a_subnet_cidr_range}"
     availability_zone = "us-east-1a"
   tags = {
-    Name = "eks"
+    Name = "eb-subnet-private-eks-a"
+  }
+}
+
+resource "aws_subnet" "eks_b" {
+    vpc_id     = aws_vpc.eb-vpc.id
+    cidr_block = "${var.eks_b_subnet_cidr_range}"
+    availability_zone = "us-east-1b"
+  tags = {
+    Name = "eb-subnet-private-eks-b"
   }
 }
 
@@ -21,7 +30,7 @@ resource "aws_subnet" "dab" {
     cidr_block = "${var.dab_subnet_cidr_range}"
     availability_zone = "us-east-1a"
   tags = {
-    Name = "dab"
+    Name = "eb-subnet-private-dab-a"
   }  
 }
 
@@ -30,16 +39,109 @@ resource "aws_subnet" "control_vm" {
     cidr_block = "${var.control_vm_subnet_cidr_range}"
     availability_zone = "us-east-1a"    
   tags = {
-    Name = "control_vm"
+    Name = "eb-subnet-private-controlvm-a"
   }
 }
 
+
+resource "aws_subnet" "online" {
+    vpc_id     = aws_vpc.eb-vpc.id
+    cidr_block = "${var.online_subnet_cidr_range}"
+    availability_zone = "us-east-1a"    
+  tags = {
+    Name = "eb-subnet-private-online-a"
+  }
+}
 resource "aws_subnet" "forgerock_rms" {
     vpc_id     = aws_vpc.eb-vpc.id
     cidr_block = "${var.forgerock_rms_subnet_cidr_range}"
     availability_zone = "us-east-1a"
   tags = {
-    Name = "forgerock_rms"
+    Name = "eb-subnet-private-forgerock-rms"
   }
 
 }
+
+resource "aws_subnet" "oam" {
+    vpc_id     = aws_vpc.eb-vpc.id
+    cidr_block = "${var.oam_subnet_cidr_range}"
+    availability_zone = "us-east-1a"
+  tags = {
+    Name = "eb-subnet-private-oam-a"
+  }
+
+}
+
+
+resource "aws_subnet" "trf" {
+    vpc_id     = aws_vpc.eb-vpc.id
+    cidr_block = "${var.trf_subnet_cidr_range}"
+    availability_zone = "us-east-1a"
+  tags = {
+    Name = "eb-subnet-private-trf-a"
+  }
+
+}
+
+
+
+resource "aws_subnet" "vpn" {
+    vpc_id     = aws_vpc.eb-vpc.id
+    cidr_block = "${var.vpn_subnet_cidr_range}"
+    availability_zone = "us-east-1b"
+  tags = {
+    Name = "eb-subnet-private-vpn"
+  }
+
+}
+
+
+resource "aws_subnet" "nat" {
+    vpc_id     = aws_vpc.eb-vpc.id
+    cidr_block = "${var.nat_subnet_cidr_range}"
+    availability_zone = "us-east-1b"
+    map_public_ip_on_launch = "true"
+  tags = {
+    Name = "eb-subnet-nat"
+  }
+
+}
+
+resource "aws_internet_gateway" "eb-igw" {
+  vpc_id = aws_vpc.eb-vpc.id
+
+  tags = {
+    Name = "eb-igw"
+  }
+}
+resource "aws_nat_gateway" "eb-nat-gateway" {
+  allocation_id = aws_eip.eb-vpc.id
+  subnet_id     = aws_subnet.nat.id
+
+  tags = {
+    Name = "eb-nat-gateway"
+  }
+
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  depends_on = [aws_internet_gateway.eb-igw]
+}
+
+resource "aws_route_table" "eb-nat-route-table" {
+  vpc_id = aws_vpc.eb-vpc.id
+
+  route {
+    cidr_block = "10.0.0.0/16"
+    nat_gateway_id = aws_internet_gateway.eb-igw.id
+  }
+
+  route {
+    ipv6_cidr_block        = "::/0"
+    egress_only_gateway_id = aws_egress_only_internet_gateway.eb-igw.id
+  }
+
+  tags = {
+    Name = "eb-nat-route-table"
+  }
+}
+
