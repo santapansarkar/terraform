@@ -114,8 +114,13 @@ resource "aws_internet_gateway" "eb-igw" {
     Name = "eb-igw"
   }
 }
+
+resource "aws_eip" "nat-gateway-elastic-ip" {
+  vpc              = true
+}
+
 resource "aws_nat_gateway" "eb-nat-gateway" {
-  allocation_id = aws_eip.eb-vpc.id
+  allocation_id = aws_eip.nat-gateway-elastic-ip.id
   subnet_id     = aws_subnet.nat.id
 
   tags = {
@@ -135,13 +140,13 @@ resource "aws_route_table" "eb-nat-route-table" {
     nat_gateway_id = aws_internet_gateway.eb-igw.id
   }
 
-  route {
-    ipv6_cidr_block        = "::/0"
-    egress_only_gateway_id = aws_egress_only_internet_gateway.eb-igw.id
-  }
-
   tags = {
     Name = "eb-nat-route-table"
   }
+}
+
+resource "aws_route_table_association" "nat-route" {
+  subnet_id = aws_subnet.nat.id
+  route_table_id = aws_route_table.eb-nat-route-table.id
 }
 
