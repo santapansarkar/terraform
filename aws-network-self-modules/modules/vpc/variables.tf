@@ -11,7 +11,6 @@ variable "vpc_name" {}
 
 variable "eks_a_subnet_cidr_range" {
       default = "10.0.155.0/24"
-  
 }
 
 variable "eks_b_subnet_cidr_range" {
@@ -54,7 +53,8 @@ variable "vpn_subnet_cidr_range" {
   
 }
 
-variable "nat_subnet_cidr_range" {
-    default = "10.0.100.0/24"
+
+variable "public_subnet_cidr_range" {
+      default = "10.0.158.0/24"
   
 }

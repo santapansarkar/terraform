@@ -95,17 +95,18 @@ resource "aws_subnet" "vpn" {
 
 }
 
-
-resource "aws_subnet" "nat" {
+resource "aws_subnet" "public" {
     vpc_id     = aws_vpc.eb-vpc.id
-    cidr_block = "${var.nat_subnet_cidr_range}"
-    availability_zone = "us-east-1b"
+    cidr_block = "${var.public_subnet_cidr_range}"
+    availability_zone = "us-east-1a"
     map_public_ip_on_launch = "true"
+
   tags = {
-    Name = "eb-subnet-nat"
+    Name = "eb-subnet-public"
   }
 
 }
+
 
 resource "aws_internet_gateway" "eb-igw" {
   vpc_id = aws_vpc.eb-vpc.id
@@ -117,11 +118,17 @@ resource "aws_internet_gateway" "eb-igw" {
 
 resource "aws_eip" "nat-gateway-elastic-ip" {
   vpc              = true
+
+  tags = {
+    Name = "eb-eip"
+  }
+
+
 }
 
 resource "aws_nat_gateway" "eb-nat-gateway" {
   allocation_id = aws_eip.nat-gateway-elastic-ip.id
-  subnet_id     = aws_subnet.nat.id
+  subnet_id     = aws_subnet.public.id
 
   tags = {
     Name = "eb-nat-gateway"
@@ -136,8 +143,9 @@ resource "aws_route_table" "eb-nat-route-table" {
   vpc_id = aws_vpc.eb-vpc.id
 
   route {
-    cidr_block = "10.0.0.0/16"
-    nat_gateway_id = aws_internet_gateway.eb-igw.id
+    cidr_block = "0.0.0.0/0"
+    #nat_gateway_id = aws_internet_gateway.eb-igw.id
+    nat_gateway_id = aws_nat_gateway.eb-nat-gateway.id
   }
 
   tags = {
@@ -146,7 +154,37 @@ resource "aws_route_table" "eb-nat-route-table" {
 }
 
 resource "aws_route_table_association" "nat-route" {
-  subnet_id = aws_subnet.nat.id
+  subnet_id = aws_subnet.control_vm.id
   route_table_id = aws_route_table.eb-nat-route-table.id
 }
 
+
+resource "aws_route_table" "eb-public-route-table" {
+  vpc_id = aws_vpc.eb-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.eb-igw.id
+    
+  }
+
+  tags = {
+    Name = "eb-public-route-table"
+  }
+}
+
+resource "aws_route_table_association" "public-route" {
+  subnet_id = aws_subnet.public.id
+  route_table_id = aws_route_table.eb-public-route-table.id
+}
+
+
+output "vpc_id" {
+  value = "${aws_vpc.eb-vpc.id}"
+  
+}
+
+output "subnet_id" {
+  value = "${aws_subnet.control_vm.id}"
+  
+}

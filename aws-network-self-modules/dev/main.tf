@@ -18,5 +18,14 @@ module "vpc" {
   oam_subnet_cidr_range           = "10.0.153.0/24"
   trf_subnet_cidr_range           = "10.0.152.0/24"
   vpn_subnet_cidr_range           = "10.0.1.0/24"
-  nat_subnet_cidr_range           = "10.0.100.0/24"
+  public_subnet_cidr_range        = "10.0.158.0/24"
+}
+
+module "ec2" {
+
+  source                   = "../modules/ec2"
+  control_vm_instance_type = "t2.micro"
+  control_vm_ami           = "ami-0c2b8ca1dad447f8a"
+  subnet_id                = module.vpc.subnet_id
+  vpc_id                   = module.vpc.vpc_id
 }
