@@ -9,6 +9,12 @@ variable "tenancy" {
 
 variable "vpc_name" {}
 
+variable "environment_tag" {}
+
+variable "module_name" {
+    default = "networking"
+}
+
 variable "eks_a_subnet_cidr_range" {
       default = "10.0.155.0/24"
 }

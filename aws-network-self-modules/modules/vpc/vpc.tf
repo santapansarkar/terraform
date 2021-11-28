@@ -4,6 +4,8 @@ resource "aws_vpc" "eb-vpc" {
 
   tags = {
     Name = "${var.vpc_name}"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"
   }
 }
 
@@ -13,6 +15,11 @@ resource "aws_subnet" "eks_a" {
     availability_zone = "us-east-1a"
   tags = {
     Name = "eb-subnet-private-eks-a"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}" 
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"       
   }
 }
 
@@ -22,6 +29,11 @@ resource "aws_subnet" "eks_b" {
     availability_zone = "us-east-1b"
   tags = {
     Name = "eb-subnet-private-eks-b"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"   
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"     
   }
 }
 
@@ -31,6 +43,11 @@ resource "aws_subnet" "dab" {
     availability_zone = "us-east-1a"
   tags = {
     Name = "eb-subnet-private-dab-a"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"  
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"      
   }  
 }
 
@@ -40,6 +57,11 @@ resource "aws_subnet" "control_vm" {
     availability_zone = "us-east-1a"    
   tags = {
     Name = "eb-subnet-private-controlvm-a"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"   
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"     
   }
 }
 
@@ -50,6 +72,11 @@ resource "aws_subnet" "online" {
     availability_zone = "us-east-1a"    
   tags = {
     Name = "eb-subnet-private-online-a"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"   
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"       
   }
 }
 resource "aws_subnet" "forgerock_rms" {
@@ -58,6 +85,11 @@ resource "aws_subnet" "forgerock_rms" {
     availability_zone = "us-east-1a"
   tags = {
     Name = "eb-subnet-private-forgerock-rms"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"    
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"       
   }
 
 }
@@ -68,6 +100,11 @@ resource "aws_subnet" "oam" {
     availability_zone = "us-east-1a"
   tags = {
     Name = "eb-subnet-private-oam-a"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"  
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"         
   }
 
 }
@@ -79,6 +116,11 @@ resource "aws_subnet" "trf" {
     availability_zone = "us-east-1a"
   tags = {
     Name = "eb-subnet-private-trf-a"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"  
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"         
   }
 
 }
@@ -91,6 +133,11 @@ resource "aws_subnet" "vpn" {
     availability_zone = "us-east-1b"
   tags = {
     Name = "eb-subnet-private-vpn"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"    
+    Tier                                              = "Private"
+    "kubernetes.io/cluster/eb-eks-cluster"            = "shared"
+    "kubernetes.io/role/elb"                          = "1"       
   }
 
 }
@@ -103,6 +150,9 @@ resource "aws_subnet" "public" {
 
   tags = {
     Name = "eb-subnet-public"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"    
+    Tier        = "Public"    
   }
 
 }
@@ -113,6 +163,8 @@ resource "aws_internet_gateway" "eb-igw" {
 
   tags = {
     Name = "eb-igw"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"  
   }
 }
 
@@ -121,6 +173,8 @@ resource "aws_eip" "nat-gateway-elastic-ip" {
 
   tags = {
     Name = "eb-eip"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"      
   }
 
 
@@ -132,6 +186,8 @@ resource "aws_nat_gateway" "eb-nat-gateway" {
 
   tags = {
     Name = "eb-nat-gateway"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"    
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
@@ -150,6 +206,8 @@ resource "aws_route_table" "eb-nat-route-table" {
 
   tags = {
     Name = "eb-nat-route-table"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"      
   }
 }
 
@@ -170,6 +228,8 @@ resource "aws_route_table" "eb-public-route-table" {
 
   tags = {
     Name = "eb-public-route-table"
+    Environment = "${var.environment_tag}"
+    Module      = "${var.module_name}"      
   }
 }
 
@@ -179,12 +239,3 @@ resource "aws_route_table_association" "public-route" {
 }
 
 
-output "vpc_id" {
-  value = "${aws_vpc.eb-vpc.id}"
-  
-}
-
-output "subnet_id" {
-  value = "${aws_subnet.control_vm.id}"
-  
-}
