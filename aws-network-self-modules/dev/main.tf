@@ -9,6 +9,8 @@ module "vpc" {
   cidr_range                      = "10.0.0.0/16"
   tenancy                         = "default"
   vpc_name                        = "eb-vpc"
+  environment_tag                 = "eb-ci-cd"
+  module_name                     = "Networking"
   eks_a_subnet_cidr_range         = "10.0.155.0/24"
   eks_b_subnet_cidr_range         = "10.0.156.0/24"
   dab_subnet_cidr_range           = "10.0.154.0/24"
@@ -21,11 +23,3 @@ module "vpc" {
   public_subnet_cidr_range        = "10.0.158.0/24"
 }
 
-module "ec2" {
-
-  source                   = "../modules/ec2"
-  control_vm_instance_type = "t2.micro"
-  control_vm_ami           = "ami-0c2b8ca1dad447f8a"
-  subnet_id                = module.vpc.subnet_id
-  vpc_id                   = module.vpc.vpc_id
-}
