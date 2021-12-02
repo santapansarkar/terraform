@@ -41,3 +41,14 @@ module "ec2" {
   forgerock_rms_vm_subnet_id     = module.vpc.forgerockrmsvm_subnet_id
 }
 
+module "efs" {
+
+  source                         = "../modules/efs"
+  environment_tag                = "eb-ci-cd"
+  module_name                    = "storage"
+  vpc_id                         = module.vpc.vpc_id
+ 
+  jumphost_vm_subnet_id          = module.vpc.jumphostvm_subnet_id
+  control_vm_subnet_id           = module.vpc.controlvm_subnet_id
+  forgerock_rms_vm_subnet_id     = module.vpc.forgerockrmsvm_subnet_id
+}

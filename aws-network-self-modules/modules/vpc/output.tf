@@ -17,3 +17,12 @@ output "forgerockrmsvm_subnet_id" {
   value = "${aws_subnet.forgerock_rms.id}"
   
 }
+
+output "eks_a_subnet_id"{
+  value = "${aws_subnet.eks_a.id}"
+}
+
+
+output "eks_b_subnet_id"{
+  value = "${aws_subnet.eks_b.id}"
+}
