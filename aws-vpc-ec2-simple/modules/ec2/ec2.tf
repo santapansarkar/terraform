@@ -40,7 +40,7 @@ resource "aws_security_group" "ssh_access" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${data.aws_vpc.eb_vpc.cidr_block}","0.0.0.0/0"]
+    cidr_blocks = ["${data.aws_vpc.private_vpc.cidr_block}","0.0.0.0/0"]
   }
 
   tags = {
@@ -73,7 +73,9 @@ resource "aws_security_group" "vpn_access" {
 }
 
 
-
+data "aws_vpc" "private_vpc" {
+  id = var.vpc_id
+}
 
 
 
