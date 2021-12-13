@@ -3,6 +3,7 @@
 resource "aws_instance" "jumphost_vm" {
   ami           = "${var.jumphost_vm_ami}"
   instance_type = "${var.jumphost_vm_instance_type}"
+  count = 4
   
   subnet_id     = "${var.jumphost_vm_subnet_id}"
   key_name      = "${var.ec2_key_pair}"
@@ -11,9 +12,14 @@ resource "aws_instance" "jumphost_vm" {
     aws_security_group.public_access.id,
   ]
 
-  
+  user_data = "${file("../modules/ec2/install_apache.sh")}"
   disable_api_termination = false
   monitoring              = false
+
+   depends_on = [
+    aws_security_group.public_access
+  ]
+
   
   root_block_device {	
     volume_size = 30
@@ -67,6 +73,7 @@ resource "aws_security_group" "public_access" {
 
   vpc_id = "${data.aws_vpc.terraform.id}"
 
+ 
   egress {
     description = "All ips and protocols"
     from_port   = 0

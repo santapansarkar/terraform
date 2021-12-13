@@ -5,6 +5,10 @@ variable "private_vm_ami" {
 
 variable "private_vm_instance_type" {
     default = "t2.micro"
+    validation {
+      condition = can(regex("^t2.micro", var.private_vm_instance_type))
+      error_message = ("The instance type value must be the right.")
+    }
   
 }
 
