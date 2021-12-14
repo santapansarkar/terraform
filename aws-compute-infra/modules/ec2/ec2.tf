@@ -3,7 +3,7 @@
 resource "aws_instance" "jumphost_vm" {
   ami           = "${var.jumphost_vm_ami}"
   instance_type = "${var.jumphost_vm_instance_type}"
-  count = 4
+  count = 1
   
   subnet_id     = "${var.jumphost_vm_subnet_id}"
   key_name      = "${var.ec2_key_pair}"
@@ -105,14 +105,25 @@ resource "aws_security_group" "ssh_access" {
     cidr_blocks = ["${data.aws_vpc.terraform.cidr_block}","0.0.0.0/0"]
   }
 
-  tags = {
+ 
+    egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+    }
+ tags = {
     Name        = "ssh-access-sg"
     Environment = "${var.environment_tag}"
     Module      = "compute"
   }
+
 }
 
-
+resource "aws_security_group" "ssh-access-default-vpc" {
+  # (resource arguments)
+}
 
 data "aws_vpc" "terraform" {
 		id = var.vpc_id

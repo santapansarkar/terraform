@@ -34,3 +34,5 @@ variable "jumphost_vm_subnet_id"{}
 
 variable "private_vm_subnet_id"{}
 
+
+
