@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "terraform" {
-  name                 = "${var.ecr_repo_name}"
+  for_each             = "${var.repositories}"
+  name                 = "${var.ecr_repo_name}/${each.value}"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -7,8 +8,3 @@ resource "aws_ecr_repository" "terraform" {
   }
 }
 
-resource "aws_ecr_repository" "console" {
-
-  name = "console-ecr"
-  
-}
