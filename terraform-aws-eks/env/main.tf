@@ -16,7 +16,7 @@ locals {
 }
 
 
-
+/*
 module "ec2" {
   source                    = "../modules/ec2"
   private_vm_ami            = "ami-0c2b8ca1dad447f8a"
@@ -30,3 +30,4 @@ module "ec2" {
   private_vm_subnet_id      = module.vpc.private_vm_subnet_id
 
 }
+*/
