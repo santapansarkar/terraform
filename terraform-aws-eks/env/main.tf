@@ -31,3 +31,13 @@ module "ec2" {
 
 }
 */
+
+
+module "eks" {
+  source = "../modules/eks"
+  cluter_name = "terraform-eks-cluster"
+  eks_iam_role_name = "terraform-eks-iam-role"
+  eks_vpc_id = module.vpc.vpc_id
+  eks_subnet_id = [module.vpc.jumphost_vm_subnet_id, module.vpc.private_vm_subnet_id]
+
+}
