@@ -1,7 +1,7 @@
 resource "aws_eks_cluster" "terraform_cluster"{
 
-    name = var.cluter_name
-    role_arn = var.eks_iam_role_name.arn
+    name = var.cluster_name
+    role_arn = var.eks_iam_role_arn
     version                 = "1.21"
   #  cluster_endpoint_private_access = true
   #  cluster_endpoint_public_access  = true
@@ -14,7 +14,7 @@ resource "aws_eks_cluster" "terraform_cluster"{
 */
  
   vpc_config {
-    subnet_ids = ["{$var.eks_subnet_id}"]
+    subnet_ids = var.eks_subnet_id
     endpoint_private_access = true
     endpoint_public_access  = true
   }

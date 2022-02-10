@@ -30,14 +30,17 @@ module "ec2" {
   private_vm_subnet_id      = module.vpc.private_vm_subnet_id
 
 }
-*/
+
 
 
 module "eks" {
   source = "../modules/eks"
-  cluter_name = "terraform-eks-cluster"
+  cluster_name = "terraform-eks-cluster"
+  eks_iam_role_arn = module.eks.eks_iam_role_arn
   eks_iam_role_name = "terraform-eks-iam-role"
   eks_vpc_id = module.vpc.vpc_id
   eks_subnet_id = [module.vpc.jumphost_vm_subnet_id, module.vpc.private_vm_subnet_id]
 
 }
+
+*/
