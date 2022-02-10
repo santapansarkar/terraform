@@ -7,4 +7,11 @@ resource "aws_vpc" "terraform" {
     Environment = "${var.vpc_env}"
     Module = "networking"
   }
+
+   provisioner "local-exec" {
+    command = "echo vpc cidr is ${self.cidr_block}"
+  
+  }
+ 
+
 }

@@ -1,1 +1,0 @@
-VPC id is vpc-06cb9f59331939b08 

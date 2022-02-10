@@ -6,8 +6,8 @@ module "vpc" {
   vpc_name            = "terraform"
   public_subnet_name  = "terraform-public-subnet"
   private_subnet_name = "terraform-private-subnet"
-}
 
+}
 
 
 
