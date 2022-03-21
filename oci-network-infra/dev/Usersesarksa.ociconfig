@@ -1,8 +1,0 @@
-
-
-[oci-cli]
-fingerprint=b5:1c:e8:b7:b9:5c:d5:b9:c8:5a:42:d8:81:6e:fa:d1
-key_file=C:\Users\esarksa\.oci\sessions\oci-cli\oci_api_key.pem
-tenancy=ocid1.tenancy.oc1..aaaaaaaa2gtobuco2rcovtq64fy3aapb7japloglhdbz6yao3zjs7vxnrfaa
-region=ap-mumbai-1
-security_token_file=C:\Users\esarksa\.oci\sessions\oci-cli\token

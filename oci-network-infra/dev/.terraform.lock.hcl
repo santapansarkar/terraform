@@ -43,6 +43,7 @@ provider "registry.terraform.io/hashicorp/oci" {
   version = "4.68.0"
   hashes = [
     "h1:+ibmD9qY8nGrxOtcxZf5JFSUWCHj9NnNdYb2+kYSgBI=",
+    "h1:pU9mgzYZ9fapGYfqWnn6F8q/VnqtG3xtJzXOom0KTmk=",
     "zh:0eb113292d8c0dfb83af8b57603f3d87f539e3d6fd59101cdc90cb839a7a15d2",
     "zh:38e135a2b40c4a72f21bfaa9761e5d541095726dbbd6c0e68b599f14626f4d15",
     "zh:42034e5dccb0c8067390242f25c10c41da68afa6bfd5dfa8a29bacd7cf0acc72",
@@ -66,6 +67,7 @@ provider "registry.terraform.io/oracle/oci" {
   constraints = "4.68.0"
   hashes = [
     "h1:+ibmD9qY8nGrxOtcxZf5JFSUWCHj9NnNdYb2+kYSgBI=",
+    "h1:pU9mgzYZ9fapGYfqWnn6F8q/VnqtG3xtJzXOom0KTmk=",
     "zh:0eb113292d8c0dfb83af8b57603f3d87f539e3d6fd59101cdc90cb839a7a15d2",
     "zh:38e135a2b40c4a72f21bfaa9761e5d541095726dbbd6c0e68b599f14626f4d15",
     "zh:42034e5dccb0c8067390242f25c10c41da68afa6bfd5dfa8a29bacd7cf0acc72",
